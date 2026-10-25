@@ -1,80 +1,45 @@
-\# Práctica 7 - Aplicación web con Dockerfile y Docker Compose
+$texto = @'
+# Práctica 7 - Aplicación web con Dockerfile y Docker Compose
 
+**Yauge Pedro Volquez Terrero**
 
+En esta práctica hice una página sencilla en PHP conectada a MySQL. Usé Docker Compose para levantar la aplicación y la base de datos, cada una en su propio contenedor.
 
-Yauge Pedro Volquez Terrero
+## Cómo la hice
 
+Primero creé la carpeta `src` y dentro coloqué el archivo `index.php`. La página consulta los mensajes guardados en la tabla `mensajes` y los muestra junto con la versión del servidor MySQL.
 
+Después preparé el `Dockerfile` con la imagen `php:8.3-apache`. Le instalé la extensión `pdo_mysql` para poder hacer la conexión desde PHP.
 
-Aplicación web en PHP que se conecta a una base de datos MySQL. Los dos servicios corren en contenedores con Docker Compose.
+En el archivo `docker-compose.yml` dejé configurados los dos servicios:
 
+- `web`: construye la imagen usando el Dockerfile y permite abrir la página desde el puerto 8080. También monta la carpeta `src`, así puedo modificar el código y ver los cambios sin reconstruir la imagen.
+- `db`: utiliza MySQL 8.0. Configuré el nombre de la base de datos, el usuario y las contraseñas mediante variables de entorno. Para conservar los datos, usé un volumen.
 
+Agregué un healthcheck para que el servicio web espere hasta que MySQL esté listo. También dejé el archivo `db/init.sql`, que crea la tabla e inserta un mensaje cuando se inicializa la base de datos por primera vez.
 
-\## Lo que hice
+## Cómo ejecutar el proyecto
 
+Para descargarlo y levantar los contenedores:
 
-
-Creé una carpeta `src` con un `index.php`. Esa página se conecta a MySQL, lee un mensaje de la tabla `mensajes` y lo muestra en pantalla junto con la versión del servidor.
-
-
-
-Para el servidor de aplicación hice un `Dockerfile` que parte de la imagen `php:8.3-apache` e instala la extensión `pdo\_mysql`, que es la que permite que PHP se comunique con MySQL.
-
-
-
-En el `docker-compose.yml` definí dos servicios:
-
-
-
-\- `web`: construye la imagen de PHP con el Dockerfile, publica el puerto 8080 y monta mi carpeta `src` dentro del contenedor.
-
-\- `db`: usa la imagen `mysql:8.0`, con el nombre de la base de datos, el usuario y las contraseñas como variables de entorno. Los datos se guardan en un volumen para que no se pierdan al apagar el contenedor.
-
-
-
-El servicio `web` espera a que MySQL esté listo antes de arrancar, usando un healthcheck. El archivo `db/init.sql` crea la tabla y el mensaje la primera vez que se inicia la base de datos.
-
-
-
-\## Cómo probarlo
-
-
-
-```
-
-git clone https://github.com/yaugepedro/hola-mundo-php-mysql.git
-
-cd hola-mundo-php-mysql
-
+```bash
+git clone https://github.com/yaugepedro/Practica-7-Practica-Web-App-con-Dockerfile-y-Docker-Compose.git
+cd Practica-7-Practica-Web-App-con-Dockerfile-y-Docker-Compose
 docker compose up -d --build
-
 ```
 
+Luego abre http://localhost:8080 en el navegador. La primera vez puede tardar un poco mientras MySQL termina de prepararse.
 
+Para detener y eliminar los contenedores:
 
-Abrir http://localhost:8080. MySQL tarda unos segundos en arrancar la primera vez.
-
-
-
-Para apagarlo:
-
-
-
-```
-
+```bash
 docker compose down
-
 ```
 
+Los datos quedan guardados en el volumen. Si quieres borrarlos también y empezar de nuevo, ejecuta:
 
-
-Para borrar también los datos de la base de datos:
-
-
-
-```
-
+```bash
 docker compose down -v
-
 ```
-
+'@
+[System.IO.File]::WriteAllText("$PWD\README.md", $texto, (New-Object System.Text.UTF8Encoding($false)))
