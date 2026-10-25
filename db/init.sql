@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS mensajes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    texto VARCHAR(100) NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO mensajes (texto) VALUES ('Hola Mundo desde MySQL');
