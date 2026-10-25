@@ -1,4 +1,3 @@
-$texto = @'
 # Práctica 7 - Aplicación web con Dockerfile y Docker Compose
 
 **Yauge Pedro Volquez Terrero**
@@ -41,5 +40,3 @@ Los datos quedan guardados en el volumen. Si quieres borrarlos también y empeza
 ```bash
 docker compose down -v
 ```
-'@
-[System.IO.File]::WriteAllText("$PWD\README.md", $texto, (New-Object System.Text.UTF8Encoding($false)))
